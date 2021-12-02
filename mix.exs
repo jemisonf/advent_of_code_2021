@@ -8,7 +8,7 @@ defmodule AdventOfCode.MixProject do
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      escript: [main_module: DayOne]
+      escript: [main_module: Day2]
     ]
   end
 
@@ -24,6 +24,7 @@ defmodule AdventOfCode.MixProject do
     [
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+      {:nimble_parsec, "~> 1.0"}
     ]
   end
 end
