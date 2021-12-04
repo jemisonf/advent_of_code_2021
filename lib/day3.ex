@@ -1,15 +1,11 @@
 defmodule Day3 do
   def place_bit(num, place) do
     use Bitwise
-    Bitwise.band(num, Integer.pow(2, place - 1)) >>> (place - 1)
+    Bitwise.band(num, 1 <<< place) >>> (place)
   end
 
   def count_place(line, place, {zeros_count, ones_count}) do
     bit = place_bit(line, place)
-
-    if place == 4 do
-      IO.puts(:stdio, bit)
-    end
 
     case bit do
       0 -> {zeros_count + 1, ones_count}
@@ -28,7 +24,7 @@ defmodule Day3 do
       Enum.map(
         Enum.zip(place_counts, 0..count),
         fn {place_count, idx} ->
-          count_place(line, idx + 1, place_count)
+          count_place(line, idx, place_count)
         end
       ),
       count
@@ -85,26 +81,61 @@ defmodule Day3 do
     IO.inspect(line_size)
 
     o2_rating =
-      Enum.reduce(0..line_size, lines, fn place, lines ->
-        {zero_count, one_count} =
-          Enum.reduce(lines, {0, 0}, fn line, counts -> count_place(line, place + 1, counts) end)
+      Enum.reduce((line_size - 1)..0, lines, fn place, lines ->
+        # IO.inspect(Enum.map(lines, fn line -> Integer.to_string(line, 2) end))
+        # IO.inspect(place, label: "Place")
 
-        place_bit =
+        {zero_count, one_count} =
+          Enum.reduce(lines, {0, 0}, fn line, counts -> count_place(line, place, counts) end)
+
+        bit =
           if zero_count > one_count do
             0
           else
             1
           end
 
+        # IO.inspect(bit, label: "Bit")
+
         if tl(lines) == [] do
           lines
         else
           Enum.filter(lines, fn line ->
-            place_bit(line, line_size - (place + 1)) == place_bit
+            place_bit(line, place) == bit
           end)
         end
       end)
 
     IO.inspect(Integer.to_string(hd(o2_rating), 2), label: "o2 rating")
+
+    co2_rating =
+      Enum.reduce((line_size - 1)..0, lines, fn place, lines ->
+        # IO.inspect(Enum.map(lines, fn line -> Integer.to_string(line, 2) end))
+        # IO.inspect(place, label: "Place")
+
+        {zero_count, one_count} =
+          Enum.reduce(lines, {0, 0}, fn line, counts -> count_place(line, place, counts) end)
+
+        bit =
+          if zero_count <= one_count do
+            0
+          else
+            1
+          end
+
+        # IO.inspect(bit, label: "Bit")
+
+        if tl(lines) == [] do
+          lines
+        else
+          Enum.filter(lines, fn line ->
+            place_bit(line, place) == bit
+          end)
+        end
+      end)
+
+    IO.inspect(Integer.to_string(hd(co2_rating), 2), label: "co2 rating")
+
+    IO.inspect(hd(co2_rating) * hd(o2_rating), label: "Pt 2 result")
   end
 end
