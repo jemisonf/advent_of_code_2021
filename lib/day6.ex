@@ -20,7 +20,7 @@ defmodule Day6 do
       end)
 
     final_buckets =
-      Enum.reduce(1..256, buckets, fn day, buckets ->
+      Enum.reduce(1..80, buckets, fn day, buckets ->
         IO.inspect(day, label: "Day")
         IO.inspect(buckets, label: "Buckets")
 
