@@ -12,17 +12,22 @@ defmodule Day7 do
     {sum, _} =
       Enum.reduce(Enum.with_index(tl(positions), 1), {0, hd(positions)}, fn {position, idx},
                                                                             {sum, last} ->
+        IO.inspect({sum, last, idx}, label: "So far")
+
         options =
           Enum.map(last..position, fn new_position ->
             {
               Enum.reduce(Enum.slice(positions, 0..idx), 0, fn pos, count ->
-                count + abs(new_position - pos)
+                # count + abs(new_position - pos)
+
+                count +
+                  Enum.reduce(pos..new_position, 0, fn step, sum -> abs(step - pos) + sum end)
               end),
               new_position
             }
           end)
 
-        IO.inspect(options, charlists: :as_list)
+        # IO.inspect(options, charlists: :as_list)
 
         Enum.min_by(options, fn {sum, _} -> sum end)
       end)
