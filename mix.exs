@@ -8,7 +8,7 @@ defmodule AdventOfCode.MixProject do
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      escript: [main_module: Day8]
+      escript: [main_module: Day9]
     ]
   end
 
